@@ -183,7 +183,7 @@ Install the latest Keploy CLI binary on your system:
 Verify your installation:
 
 <CodeBlock language="bash">
-keploy --version
+{`keploy --version`}
 </CodeBlock>
 </section>
 
@@ -194,8 +194,8 @@ keploy --version
 Let's clone the official Keploy Go samples repository and navigate to the `gin-mongo` directory:
 
 <CodeBlock language="bash" filename="Terminal">
-git clone https://github.com/keploy/samples-go.git
-cd samples-go/gin-mongo
+{`git clone https://github.com/keploy/samples-go.git
+cd samples-go/gin-mongo`}
 </CodeBlock>
 
 ### Understanding the Application Code
@@ -274,7 +274,7 @@ go build -cover -o test-app-url-shortener`,
 Now comes the fun part. We will start our application under Keploy's watchful eye using `keploy record`:
 
 <CodeBlock language="bash" filename="Terminal">
-keploy record -c "docker run -p 8080:8080 --name MongoApp --network keploy-network gin-app:1.0"
+{`keploy record -c "docker run -p 8080:8080 --name MongoApp --network keploy-network gin-app:1.0"`}
 </CodeBlock>
 
 <Callout type="tip" title="What Keploy is Doing Here">
@@ -394,14 +394,14 @@ spec:
 Now let's test our application. First, prove that MongoDB is no longer needed:
 
 <CodeBlock language="bash" filename="Terminal">
-# Shut down the MongoDB container completely!
-docker stop mongoDb
+{`# Shut down the MongoDB container completely!
+docker stop mongoDb`}
 </CodeBlock>
 
 Now execute `keploy test`:
 
 <CodeBlock language="bash" filename="Terminal">
-keploy test -c "docker run -p 8080:8080 --name ginMongoApp --network keploy-network gin-app:1.0" --delay 10
+{`keploy test -c "docker run -p 8080:8080 --name ginMongoApp --network keploy-network gin-app:1.0" --delay 10`}
 </CodeBlock>
 
 ### The First Test Run Result: Test Failed! 🚨
@@ -452,7 +452,7 @@ Open `keploy/test-set-0/tests/test-1.yaml` and add `body.ts: []` under the `nois
 With the noise assertion configured, re-run the test suite:
 
 <CodeBlock language="bash" filename="Terminal">
-keploy test -c "docker run -p 8080:8080 --name ginMongoApp --network keploy-network gin-app:1.0" --delay 10
+{`keploy test -c "docker run -p 8080:8080 --name ginMongoApp --network keploy-network gin-app:1.0" --delay 10`}
 </CodeBlock>
 
 **Output:**
@@ -475,8 +475,8 @@ All test cases pass with zero errors, even with MongoDB completely turned off!
 For Go developers, high code coverage is often required in CI gates. Keploy integrates natively with Go's coverage tooling:
 
 <CodeBlock language="bash" filename="Terminal">
-# In native Go environment
-keploy test -c "./test-app-url-shortener" --goCoverage --delay 10
+{`# In native Go environment
+keploy test -c "./test-app-url-shortener" --goCoverage --delay 10`}
 </CodeBlock>
 
 ### Coverage Report Breakdown
@@ -582,18 +582,18 @@ In GitHub Actions, you can run `keploy test` as a lightweight step without needi
 
     {/* Quick Resource Card */}
     <div className="p-4.5 rounded-2xl border border-[var(--border-color)] bg-[var(--bg-surface)] shadow-sm">
-      <div className="flex items-center gap-2 mb-2 text-xs font-bold text-[var(--text-primary)] uppercase tracking-wider">
+      <div className="flex items-center gap-2 mb-3 text-xs font-bold text-[var(--text-primary)] uppercase tracking-wider">
         <Terminal className="w-4 h-4 text-[var(--brand-orange)]" />
         <span>Quick Terminal Cheat Sheet</span>
       </div>
-      <div className="space-y-2 text-xs font-mono text-[var(--text-muted)]">
-        <div className="p-2 rounded bg-[var(--bg-surface-elevated)] border border-[var(--border-color)]">
-          <div className="text-[10px] text-[var(--brand-orange)]"># 1. Record</div>
-          keploy record -c "..."
+      <div className="space-y-2.5 text-xs font-mono">
+        <div className="p-2.5 rounded-lg bg-[#0d111c] border border-[#1e293b] text-[#e2e8f0]">
+          <div className="text-[10px] text-[#ff7d42] font-semibold mb-1"># 1. Record Mode</div>
+          <code>keploy record -c "..."</code>
         </div>
-        <div className="p-2 rounded bg-[var(--bg-surface-elevated)] border border-[var(--border-color)]">
-          <div className="text-[10px] text-emerald-500"># 2. Test & Coverage</div>
-          keploy test -c "..." --delay 10
+        <div className="p-2.5 rounded-lg bg-[#0d111c] border border-[#1e293b] text-[#e2e8f0]">
+          <div className="text-[10px] text-emerald-400 font-semibold mb-1"># 2. Replay &amp; Coverage</div>
+          <code>keploy test -c "..." --delay 10</code>
         </div>
       </div>
     </div>

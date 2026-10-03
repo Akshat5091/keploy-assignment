@@ -67,6 +67,18 @@ body {
   overflow-x: hidden;
 }
 
+/* Ensure code block elements always maintain high contrast on dark code containers */
+pre code,
+.token.comment,
+.hljs-comment,
+code .comment {
+  color: #94a3b8 !important;
+}
+
+pre {
+  color: #f1f5f9;
+}
+
 /* Custom Scrollbars */
 ::-webkit-scrollbar {
   width: 8px;

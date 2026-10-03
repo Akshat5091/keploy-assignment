@@ -96,7 +96,7 @@ export function CodeBlock({
 
       {/* Code Body */}
       <div className="relative p-4 overflow-x-auto text-[13px] font-mono leading-relaxed selection:bg-[#ff7d42]/30 selection:text-white">
-        <pre className="m-0 p-0 bg-transparent text-[#e2e8f0]">
+        <pre className="m-0 p-0 bg-transparent text-[#e2e8f0] [&_*]:!text-[#e2e8f0] [&_h1]:!text-[#94a3b8] [&_h1]:!text-[13px] [&_h1]:!font-mono [&_h1]:!font-normal [&_h1]:!m-0 [&_h2]:!text-[#94a3b8] [&_h2]:!text-[13px] [&_h2]:!font-mono [&_h2]:!font-normal [&_h2]:!m-0 [&_p]:!my-0 [&_p]:!text-[#e2e8f0] [&_.comment]:!text-[#94a3b8]">
           <code>{children || textContent}</code>
         </pre>
       </div>
