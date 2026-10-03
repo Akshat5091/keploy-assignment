@@ -3,7 +3,7 @@
 > **Keploy DevRel Assignment Submission**  
 > An interactive, editorial-grade developer tutorial demonstrating how Keploy intercepts network sockets using eBPF to generate zero-code regression tests and mocks for a Go (Gin) + MongoDB microservice.
 
-[![Live Demo](https://img.shields.io/badge/Demo-Live%20on%20Vercel-success?style=flat-square&logo=vercel)](https://keploy-devrel-docs-umber.vercel.app)
+[![Live Demo](https://img.shields.io/badge/Demo-Live%20on%20Vercel-success?style=flat-square&logo=vercel)](https://akshat-keploy-demo.vercel.app)
 [![Next.js](https://img.shields.io/badge/Framework-Next.js%2016-black?style=flat-square&logo=next.js)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/Language-TypeScript-blue?style=flat-square&logo=typescript)](https://www.typescriptlang.org/)
 [![MDX](https://img.shields.io/badge/Authoring-MDX-yellow?style=flat-square&logo=mdx)](https://mdxjs.com/)
@@ -13,7 +13,7 @@
 
 ## 🔗 Submission Links
 
-- **🌐 Live Documentation Site**: [https://keploy-devrel-docs-umber.vercel.app](https://keploy-devrel-docs-umber.vercel.app)
+- **🌐 Live Documentation Site**: [https://akshat-keploy-demo.vercel.app](https://akshat-keploy-demo.vercel.app)
 - **📦 GitHub Repository**: [https://github.com/Akshat5091/keploy-assignment](https://github.com/Akshat5091/keploy-assignment)
 
 ---
