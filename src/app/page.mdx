@@ -29,13 +29,13 @@ import { Sparkles, Terminal, CheckCircle2, ArrowRight, ShieldCheck, Database, La
   </h1>
 
   <p className="mt-4 text-base sm:text-lg text-[var(--text-secondary)] max-w-3xl leading-relaxed">
-    A comprehensive, hands-on DevRel tutorial explaining how Keploy records real API traffic, generates zero-code MongoDB mocks using kernel-level eBPF interception, and executes automated regression tests without writing boilerplate mock code.
+    A practical, step-by-step guide on how I used Keploy to record real API traffic, generate zero-code MongoDB mocks using eBPF, and run automated regression tests on a Go Gin microservice without writing mock boilerplate.
   </p>
 
   {/* Metadata bar */}
   <div className="mt-6 flex flex-wrap items-center gap-6 text-xs text-[var(--text-muted)] font-mono border-t border-[var(--border-color)]/60 pt-4">
     <div>
-      <span className="text-[var(--text-secondary)] font-medium">Author:</span> Akshat (Keploy DevRel Candidate)
+      <span className="text-[var(--text-secondary)] font-medium">Author:</span> Akshat Nagori
     </div>
     <div>
       <span className="text-[var(--text-secondary)] font-medium">Sample App:</span> Gin + MongoDB URL Shortener
@@ -112,7 +112,7 @@ If you have built microservices in Go, you already know the pain of testing data
   <KeyConceptCard
     icon="cpu"
     title="Native Go Code Coverage"
-    description="Leverage Go's built-in 'go build -cover' to generate genuine statement coverage reports from integration traffic."
+    description="Use Go's native 'go build -cover' to get accurate statement coverage numbers directly from integration test runs."
     highlight="Reports exact % coverage"
   />
 </div>
@@ -152,7 +152,7 @@ For this tutorial, we will use Keploy's canonical Go sample: **Gin Web Framework
 
 <Callout type="info" title="Requirements Checklist">
   Before starting, ensure you have the following installed on your machine:
-  - **Docker** (Desktop or Engine) — recommended for seamless container network isolation.
+  - **Docker** (Desktop or Engine) — makes running Mongo and the app container straightforward.
   - **cURL** or **Postman** — to send sample HTTP requests.
   - **Keploy CLI v2** — installed via the official one-liner script below.
 </Callout>
@@ -175,7 +175,7 @@ Install the latest Keploy CLI binary on your system:
       label: "Windows (WSL2 / Docker)",
       language: "bash",
       code: "# Run inside your WSL2 terminal or Docker container:\ncurl --silent -O -L https://keploy.io/install.sh && source install.sh",
-      notes: "Keploy leverages Linux eBPF, so on Windows it runs through WSL2 or Docker."
+      notes: "Keploy uses Linux eBPF under the hood, so on Windows you can run it through WSL2 or Docker."
     }
   ]}
 />
@@ -234,7 +234,7 @@ func ShortenURL(c *gin.Context) {
 </CodeBlock>
 
 ### Start MongoDB & Build the Application Container
-We create a custom Docker network so that Keploy, the Gin app, and MongoDB can seamlessly resolve each other:
+We create a custom Docker network so the Gin app and MongoDB can resolve each other by container name:
 
 <CodeTabs
   tabs={[
