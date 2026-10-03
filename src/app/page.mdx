@@ -1,0 +1,603 @@
+import { TableOfContents } from "@/components/TableOfContents";
+import { ArchitectureDiagram } from "@/components/ArchitectureDiagram";
+import { InteractiveTestRunner } from "@/components/InteractiveTestRunner";
+import { CodeTabs } from "@/components/CodeTabs";
+import { CodeBlock } from "@/components/CodeBlock";
+import { Callout } from "@/components/Callout";
+import { Step, StepList } from "@/components/Step";
+import { Badge } from "@/components/Badge";
+import { KeyConceptCard } from "@/components/KeyConceptCard";
+import { YamlDiffViewer } from "@/components/YamlDiffViewer";
+import { TroubleshootingFAQ } from "@/components/TroubleshootingFAQ";
+import { GithubIcon } from "@/components/Icons";
+import { Sparkles, Terminal, CheckCircle2, ArrowRight, ShieldCheck, Database, Layers, ExternalLink, Zap } from "lucide-react";
+
+{/* Page Hero Section */}
+<div className="mb-12 pt-4 pb-8 border-b border-[var(--border-color)]">
+  <div className="flex flex-wrap items-center gap-2 mb-4">
+    <Badge variant="orange">Keploy v2 Quickstart</Badge>
+    <Badge variant="cyan">Go & Gin Framework</Badge>
+    <Badge variant="emerald">MongoDB Wire Mocks</Badge>
+    <Badge variant="purple">eBPF Interception</Badge>
+  </div>
+
+  <h1 className="text-3xl sm:text-5xl font-black text-[var(--text-primary)] tracking-tight leading-[1.15]">
+    Zero to 100% Test Coverage: <br className="hidden sm:inline" />
+    <span className="bg-gradient-to-r from-[var(--brand-orange)] via-amber-400 to-sky-400 bg-clip-text text-transparent">
+      Testing Go Microservices with Keploy
+    </span>
+  </h1>
+
+  <p className="mt-4 text-base sm:text-lg text-[var(--text-secondary)] max-w-3xl leading-relaxed">
+    A comprehensive, hands-on DevRel tutorial explaining how Keploy records real API traffic, generates zero-code MongoDB mocks using kernel-level eBPF interception, and executes automated regression tests without writing boilerplate mock code.
+  </p>
+
+  {/* Metadata bar */}
+  <div className="mt-6 flex flex-wrap items-center gap-6 text-xs text-[var(--text-muted)] font-mono border-t border-[var(--border-color)]/60 pt-4">
+    <div>
+      <span className="text-[var(--text-secondary)] font-medium">Author:</span> Akshat (Keploy DevRel Candidate)
+    </div>
+    <div>
+      <span className="text-[var(--text-secondary)] font-medium">Sample App:</span> Gin + MongoDB URL Shortener
+    </div>
+    <div>
+      <span className="text-[var(--text-secondary)] font-medium">Estimated Time:</span> 8-10 minutes
+    </div>
+  </div>
+
+  {/* High-Impact Stat Highlights */}
+  <div className="grid grid-cols-2 md:grid-cols-4 gap-3.5 mt-8">
+    <div className="p-3.5 rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] shadow-sm">
+      <div className="text-2xl font-black text-[var(--brand-orange)] font-mono">0 Lines</div>
+      <div className="text-[11px] text-[var(--text-muted)] mt-0.5">Mock code written</div>
+    </div>
+    <div className="p-3.5 rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] shadow-sm">
+      <div className="text-2xl font-black text-emerald-500 font-mono">100%</div>
+      <div className="text-[11px] text-[var(--text-muted)] mt-0.5">Automated test pass rate</div>
+    </div>
+    <div className="p-3.5 rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] shadow-sm">
+      <div className="text-2xl font-black text-sky-500 font-mono">83.3%</div>
+      <div className="text-[11px] text-[var(--text-muted)] mt-0.5">Go statement coverage</div>
+    </div>
+    <div className="p-3.5 rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] shadow-sm">
+      <div className="text-2xl font-black text-purple-500 font-mono">0 DB</div>
+      <div className="text-[11px] text-[var(--text-muted)] mt-0.5">Instances required in CI</div>
+    </div>
+  </div>
+</div>
+
+{/* Two-Column Responsive Layout */}
+<div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+
+{/* Main Tutorial Body (8 columns on desktop) */}
+<div className="lg:col-span-8 min-w-0">
+
+{/* Section: Introduction & The Why */}
+<section id="introduction">
+## Why Keploy for Go Developers?
+
+If you have built microservices in Go, you already know the pain of testing database and HTTP layers. The traditional testing lifecycle in Go looks something like this:
+
+1. **Tedious Interfaces**: You define Go interfaces for every repository (`type UserRepository interface`), generate mocks using `mockgen` or `testify`, and write verbose table-driven unit tests.
+2. **Brittle Unit Mocks**: Unit tests with fake mocks pass cleanly on your laptop, but when your application interacts with a live MongoDB cluster in staging, subtle differences in query operators, wire protocol serialization, or indices cause production outages.
+3. **Flaky End-to-End Suites**: Setting up Docker-Compose or Testcontainers in CI is slow, consumes heavy resources, and frequently breaks due to race conditions or leftover state in the database.
+
+<Callout type="aha" title="The Keploy Paradigm Shift">
+  Instead of writing manual tests and fake mocks, **Keploy turns real API interactions into automated test cases and wire-level database mocks**. 
+
+  It operates at the network socket layer using Linux **eBPF (Extended Berkeley Packet Filter)**. Your Go application does not need any SDK dependencies, code alterations, or test wrappers.
+</Callout>
+
+### Core Advantages at a Glance
+
+<div className="grid grid-cols-1 sm:grid-cols-2 gap-4 my-6">
+  <KeyConceptCard
+    icon="zap"
+    title="Zero Code Instrumentation"
+    description="Your Go code remains 100% pure. Keploy hooks into Linux network sockets to record and replay traffic transparently."
+    highlight="No SDKs or handler wrappers"
+  />
+  <KeyConceptCard
+    icon="shield"
+    title="Zero-Infrastructure Replay"
+    description="During testing, MongoDB can be completely offline. Keploy intercepts database TCP sockets and feeds recorded BSON packets directly."
+    highlight="Fast & isolated CI pipelines"
+  />
+  <KeyConceptCard
+    icon="repeat"
+    title="Contract & Regression Testing"
+    description="Detect unexpected response payload drifts, status code regressions, and header mutations automatically on every pull request."
+    highlight="Deep field-level assertions"
+  />
+  <KeyConceptCard
+    icon="cpu"
+    title="Native Go Code Coverage"
+    description="Leverage Go's built-in 'go build -cover' to generate genuine statement coverage reports from integration traffic."
+    highlight="Reports exact % coverage"
+  />
+</div>
+</section>
+
+{/* Section: Architecture & eBPF Interception */}
+<section id="architecture">
+## Architecture & How eBPF Interception Works
+
+To understand why Keploy is so effective, we must understand what happens under the hood. 
+
+Keploy operates in two distinct phases: **Record Mode** and **Test Mode**. Explore the interactive diagram below to see how traffic flows:
+
+<ArchitectureDiagram />
+
+### 1. In Record Mode (`keploy record`)
+When you launch your Go application with Keploy:
+- Keploy loads an **eBPF program** into the kernel (or attaches a transparent network proxy in containerized environments).
+- As you send HTTP requests (e.g. shortening a URL via `POST /url`), Keploy intercepts the incoming HTTP payload, headers, and status code.
+- Simultaneously, when the Go Gin handler executes queries against MongoDB (port `27017`), Keploy captures the exact **MongoDB Wire Protocol** frames (such as `OpMsg` and `OpQuery` requests, along with MongoDB's BSON response).
+- Keploy serializes the HTTP interaction into `./keploy/test-set-0/tests/test-1.yaml` and the database interactions into `./keploy/test-set-0/mocks.yaml`.
+
+### 2. In Test / Replay Mode (`keploy test`)
+When you run your test suite:
+- **MongoDB does not need to run!** You can shut down your database instance completely.
+- Keploy's internal test runner replays the recorded HTTP request to `http://localhost:8080/url`.
+- When the Go application attempts to connect to `localhost:27017` to write or query data, Keploy intercepts the TCP connection at the socket layer and returns the exact recorded BSON response from `mocks.yaml`.
+- The application executes its normal business logic without realizing the database is virtualized.
+- Keploy captures the live response and compares it field-by-field against the recorded baseline in `test-1.yaml`.
+</section>
+
+{/* Section: Prerequisites */}
+<section id="prerequisites">
+## Prerequisites & Quickstart Selection
+
+For this tutorial, we will use Keploy's canonical Go sample: **Gin Web Framework with MongoDB** (a realistic URL Shortener service).
+
+<Callout type="info" title="Requirements Checklist">
+  Before starting, ensure you have the following installed on your machine:
+  - **Docker** (Desktop or Engine) — recommended for seamless container network isolation.
+  - **cURL** or **Postman** — to send sample HTTP requests.
+  - **Keploy CLI v2** — installed via the official one-liner script below.
+</Callout>
+
+### Install Keploy CLI
+
+Install the latest Keploy CLI binary on your system:
+
+<CodeTabs
+  tabs={[
+    {
+      id: "linux-mac",
+      label: "Linux / macOS (Bash)",
+      language: "bash",
+      code: "curl --silent -O -L https://keploy.io/install.sh && source install.sh",
+      notes: "Installs the Keploy binary to /usr/local/bin and verifies installation."
+    },
+    {
+      id: "windows-wsl",
+      label: "Windows (WSL2 / Docker)",
+      language: "bash",
+      code: "# Run inside your WSL2 terminal or Docker container:\ncurl --silent -O -L https://keploy.io/install.sh && source install.sh",
+      notes: "Keploy leverages Linux eBPF, so on Windows it runs through WSL2 or Docker."
+    }
+  ]}
+/>
+
+Verify your installation:
+
+<CodeBlock language="bash">
+keploy --version
+</CodeBlock>
+</section>
+
+{/* Section: Step 1 Setup */}
+<section id="step-1-setup">
+## Step 1: Setup MongoDB & the Go Gin Application
+
+Let's clone the official Keploy Go samples repository and navigate to the `gin-mongo` directory:
+
+<CodeBlock language="bash" filename="Terminal">
+git clone https://github.com/keploy/samples-go.git
+cd samples-go/gin-mongo
+</CodeBlock>
+
+### Understanding the Application Code
+Let's look at `main.go` and `handler.go`. The URL shortener provides two core endpoints:
+- `POST /url`: Accepts a JSON body `{"url": "https://google.com"}`. Generates a shortened hash, persists it in MongoDB with a creation timestamp (`ts`), and returns the short URL.
+- `GET /:param`: Looks up the shortened hash in MongoDB and responds with an HTTP `302 Redirect` to the destination URL.
+
+<CodeBlock language="go" filename="handler.go (Excerpt)">
+{`type ShortenReq struct {
+    URL string \`json:"url"\`
+}
+
+type ShortenResp struct {
+    Ts  int64  \`json:"ts"\`
+    URL string \`json:"url"\`
+}
+
+func ShortenURL(c *gin.Context) {
+    var req ShortenReq
+    if err := c.ShouldBindJSON(&req); err != nil {
+        c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+        return
+    }
+
+    id := generateShortID()
+    now := time.Now().UnixNano() // Note: Dynamic runtime timestamp!
+    
+    // Save mapping into MongoDB collection
+    _, err := collection.InsertOne(c.Request.Context(), bson.M{
+        "_id": id,
+        "url": req.URL,
+        "ts":  now,
+    })
+    ...
+}`}
+</CodeBlock>
+
+### Start MongoDB & Build the Application Container
+We create a custom Docker network so that Keploy, the Gin app, and MongoDB can seamlessly resolve each other:
+
+<CodeTabs
+  tabs={[
+    {
+      id: "docker-workflow",
+      label: "Docker Workflow (Standard)",
+      language: "bash",
+      code: `# 1. Create dedicated bridge network
+docker network create keploy-network
+
+# 2. Start MongoDB container
+docker run -p 27017:27017 -d --network keploy-network --name mongoDb mongo
+
+# 3. Build the Go Gin application image
+docker build -t gin-app:1.0 .`,
+      notes: "The Dockerfile compiles the Go app with coverage instrumentation."
+    },
+    {
+      id: "native-workflow",
+      label: "Native Go Binary Workflow",
+      language: "bash",
+      code: `# 1. Start MongoDB locally (port 27017)
+docker run -p 27017:27017 -d --name mongoDb mongo
+
+# 2. Build Go binary with coverage enabled
+go build -cover -o test-app-url-shortener`,
+      notes: "The -cover flag is required to track Go statement coverage during Keploy test runs."
+    }
+  ]}
+/>
+</section>
+
+{/* Section: Step 2 Record */}
+<section id="step-2-record">
+## Step 2: Record Real API Traffic with `keploy record`
+
+Now comes the fun part. We will start our application under Keploy's watchful eye using `keploy record`:
+
+<CodeBlock language="bash" filename="Terminal">
+keploy record -c "docker run -p 8080:8080 --name MongoApp --network keploy-network gin-app:1.0"
+</CodeBlock>
+
+<Callout type="tip" title="What Keploy is Doing Here">
+  Keploy boots your container inside the `keploy-network`, attaches network interception hooks, and waits for incoming traffic on port `8080`.
+</Callout>
+
+### Generate Test Cases with Realistic API Calls
+In another terminal tab, let's make our API calls using `curl`:
+
+#### 1. Shorten a URL (`POST /url`)
+<CodeBlock language="bash">
+{`curl --request POST \\
+  --url http://localhost:8080/url \\
+  --header 'content-type: application/json' \\
+  --data '{
+    "url": "https://google.com"
+  }'`}
+</CodeBlock>
+
+**Application Response:**
+<CodeBlock language="json">
+{`{
+  "ts": 1718943885198315028,
+  "url": "http://localhost:8080/Lhr4BWAi"
+}`}
+</CodeBlock>
+
+#### 2. Redirect to Original URL (`GET /Lhr4BWAi`)
+<CodeBlock language="bash">
+{`curl --request GET \\
+  --url http://localhost:8080/Lhr4BWAi`}
+</CodeBlock>
+
+**Terminal logs:** Keploy immediately outputs that it has detected inbound HTTP calls, captured outbound MongoDB requests, and written them into the `./keploy` directory!
+
+Stop the recording by pressing `Ctrl + C` in the Keploy terminal.
+</section>
+
+{/* Section: Step 3 Artifacts */}
+<section id="step-3-artifacts">
+## Step 3: Deep Dive into Generated Tests & Mocks
+
+Let's inspect the files Keploy created in your workspace:
+
+```txt
+keploy/
+└── test-set-0/
+    ├── mocks.yaml
+    └── tests/
+        ├── test-1.yaml
+        └── test-2.yaml
+```
+
+### Inspecting `test-1.yaml` (The Ingress Test Contract)
+Opening `test-1.yaml`, we find the complete HTTP transaction captured declaratively:
+
+<CodeBlock language="yaml" filename="keploy/test-set-0/tests/test-1.yaml">
+{`version: api.keploy.io/v1beta1
+kind: Http
+name: test-1
+spec:
+    metadata: {}
+    req:
+        method: POST
+        url: http://localhost:8080/url
+        header:
+            Content-Type: application/json
+        body: |-
+            {
+              "url": "https://google.com"
+            }
+    resp:
+        status_code: 200
+        header:
+            Content-Type: application/json; charset=utf-8
+        body: '{"ts":1718943885198315028,"url":"http://localhost:8080/Lhr4BWAi"}'
+    assertions:
+        noise:
+            header.Date: []`}
+</CodeBlock>
+
+### Inspecting `mocks.yaml` (The Egress Dependency Contract)
+This is where Keploy's magic truly shines. Look inside `mocks.yaml`:
+
+<CodeBlock language="yaml" filename="keploy/test-set-0/mocks.yaml (Excerpt)">
+{`version: api.keploy.io/v1beta1
+kind: Mongo
+name: mock-1
+spec:
+    metadata:
+        operation: '{ OpMsg flags: 0, sections: [{ ... update: "url-shortener", updates: [{ _id: "Lhr4BWAi", url: "https://google.com" }] }] }'
+    requests:
+        - header:
+            Opcode: 2013 # OpMsg opcode
+          message:
+            sections:
+                - '{ SectionSingle msg: {"update":"url-shortener","ordered":true,"$db":"keploy"} }'
+    responses:
+        - header:
+            Opcode: 1
+          message:
+            documents:
+                - '{"n":{"$numberInt":"1"},"nModified":{"$numberInt":"1"},"ok":{"$numberDouble":"1.0"}}'`}
+</CodeBlock>
+
+<Callout type="aha" title="A-ha! Moment: Wire Protocol Mocks">
+  Notice that Keploy did not mock a Go function or interface. It recorded the **actual MongoDB Wire Protocol network packet exchange**! 
+
+  This means you can change your Go Mongo driver version or refactor your internal Go data models—as long as the database protocol remains compatible, your tests will faithfully execute without updating a single mock!
+</Callout>
+</section>
+
+{/* Section: Step 4 Replay */}
+<section id="step-4-replay">
+## Step 4: Replay Tests & The Dynamic Timestamp Gotcha
+
+Now let's test our application. First, prove that MongoDB is no longer needed:
+
+<CodeBlock language="bash" filename="Terminal">
+# Shut down the MongoDB container completely!
+docker stop mongoDb
+</CodeBlock>
+
+Now execute `keploy test`:
+
+<CodeBlock language="bash" filename="Terminal">
+keploy test -c "docker run -p 8080:8080 --name ginMongoApp --network keploy-network gin-app:1.0" --delay 10
+</CodeBlock>
+
+### The First Test Run Result: Test Failed! 🚨
+
+When you run this command for the very first time, Keploy's test suite will fail on `test-1`. 
+
+Why? Let's check the test diff output:
+
+```txt
+--------------------------------------------------------------------
+  Test Set: "test-set-0"
+  Test: "test-1" (POST /url)
+--------------------------------------------------------------------
+  Result: FAILED ❌
+  Diff:
+    Field: body.ts
+    Expected: 1718943885198315028
+    Actual:   1718943921004123891
+--------------------------------------------------------------------
+```
+
+<Callout type="warning" title="The 'A-ha!' Learning: Understanding Dynamic Noise">
+  **Why did the test fail?** 
+  
+  In `handler.go`, line 38 calls `time.Now().UnixNano()` to generate the creation timestamp. When Keploy replayed the request, the Go app executed that line again, creating a *new* current timestamp. 
+  
+  Keploy's assertion engine strictly validates the entire response body. It detected that `1718943921004123891` did not match `1718943885198315028` and rightly flagged a mismatch.
+</Callout>
+</section>
+
+{/* Section: Step 5 Noise */}
+<section id="step-5-noise">
+## Step 5: Declarative Noise Filtering & 100% Pass
+
+In real-world applications, APIs frequently contain dynamic, non-deterministic values:
+- Timestamps (`created_at`, `ts`, `Date`)
+- Random UUIDs (`id: "c82b1...`)
+- Authentication tokens & session cookies
+
+Keploy handles this elegantly through **Noise Assertions**.
+
+### Adding `body.ts` to `assertions.noise`
+Open `keploy/test-set-0/tests/test-1.yaml` and add `body.ts: []` under the `noise` section:
+
+<YamlDiffViewer />
+
+### Re-running `keploy test`
+With the noise assertion configured, re-run the test suite:
+
+<CodeBlock language="bash" filename="Terminal">
+keploy test -c "docker run -p 8080:8080 --name ginMongoApp --network keploy-network gin-app:1.0" --delay 10
+</CodeBlock>
+
+**Output:**
+
+```txt
+<=========================================>
+  TOTAL TESTS PASSED: 2
+  TOTAL TESTS FAILED: 0
+  TEST RUN RESULT:    PASSED ✅
+<=========================================>
+```
+
+All test cases pass with zero errors, even with MongoDB completely turned off!
+</section>
+
+{/* Section: Step 6 Coverage */}
+<section id="step-6-coverage">
+## Step 6: Native Go Code Coverage (`--goCoverage`)
+
+For Go developers, high code coverage is often required in CI gates. Keploy integrates natively with Go's coverage tooling:
+
+<CodeBlock language="bash" filename="Terminal">
+# In native Go environment
+keploy test -c "./test-app-url-shortener" --goCoverage --delay 10
+</CodeBlock>
+
+### Coverage Report Breakdown
+Keploy outputs a comprehensive coverage summary:
+
+```txt
+--------------------------------------------------------------------
+  Coverage Report:
+  File: test-app-url-shortener/handler.go    Coverage: 81.8%
+  File: test-app-url-shortener/main.go       Coverage: 88.9%
+  Total Statement Coverage:                  83.3% of statements
+--------------------------------------------------------------------
+```
+
+<Callout type="tip" title="Why --goCoverage is a Game Changer">
+  You achieve **83.3% genuine statement coverage** across HTTP routing, request binding, database queries, and response serialization without writing a single mock object or test table!
+</Callout>
+</section>
+
+{/* Section: Interactive Playground */}
+<section id="interactive-playground">
+## Interactive Keploy Simulator
+
+Test your understanding right inside this documentation page! Click through the interactive playground below to simulate recording API calls, witnessing the timestamp mismatch, configuring the noise rule, and watching the test suite pass:
+
+<InteractiveTestRunner />
+</section>
+
+{/* Section: DevRel Learnings & Gotchas */}
+<section id="devrel-learnings">
+## DevRel Insights, Gotchas & Best Practices
+
+As a Developer Relations advocate, guiding engineers through their first Keploy implementation requires anticipating the common friction points and highlighting the "aha!" moments:
+
+### 1. The Power of Zero Code Changes
+Developers are often skeptical when told a tool provides automated integration testing. They expect a heavy SDK, custom context wrappers, or special test runners. Demonstrating that `main.go` remains untouched builds instant credibility.
+
+### 2. Gotcha: Graceful Application Shutdown
+When testing Go applications built with `go build -cover`, Go writes its coverage profile upon receiving a termination signal (`SIGTERM` / `SIGINT`). If your Go app exits abruptly without catching signals, coverage profiles can be lost or corrupted.
+```go
+// Recommended pattern in main.go
+quit := make(chan os.Signal, 1)
+signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
+<-quit
+log.Println("Shutting down server gracefully...")
+```
+
+### 3. Gotcha: Delay Flag (`--delay`)
+When running containerized applications, the application container requires a few seconds to boot and establish listener sockets on port `8080`. Always use `--delay 10` (or appropriate seconds) so Keploy doesn't start replaying requests before the server is ready to accept traffic.
+
+### 4. CI/CD Pipeline Superpower
+In GitHub Actions, you can run `keploy test` as a lightweight step without needing service containers for MongoDB, Postgres, or Redis. Test execution times drop from minutes to seconds, eliminating cloud infrastructure costs and flaky test runs.
+</section>
+
+{/* Section: Troubleshooting FAQ */}
+<section id="faq">
+## Frequently Asked Questions
+
+<TroubleshootingFAQ />
+</section>
+
+{/* Summary Footer Callout */}
+<div className="my-12 p-6 sm:p-8 rounded-2xl bg-gradient-to-br from-[var(--bg-surface-elevated)] to-[var(--bg-surface)] border border-[var(--border-color)] shadow-md">
+  <div className="flex items-center gap-3 mb-3">
+    <div className="w-9 h-9 rounded-xl bg-[var(--brand-orange)] text-white flex items-center justify-center font-bold">
+      <Sparkles className="w-5 h-5" />
+    </div>
+    <h3 className="text-lg font-bold text-[var(--text-primary)]">
+      Ready to Supercharge Your Go Testing?
+    </h3>
+  </div>
+  <p className="text-sm text-[var(--text-secondary)] leading-relaxed mb-5">
+    Keploy eliminates the tedious boilerplate of manual mocking and integration test setup. Try it out on your own Go microservices today!
+  </p>
+  <div className="flex flex-wrap items-center gap-3">
+    <a
+      href="https://keploy.io/docs"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="px-4 py-2 rounded-xl text-xs font-bold bg-[var(--brand-orange)] hover:bg-[var(--brand-orange-hover)] text-white transition-all cursor-pointer flex items-center gap-1.5 shadow-sm"
+    >
+      <span>Explore Keploy Docs</span>
+      <ExternalLink className="w-3.5 h-3.5" />
+    </a>
+    <a
+      href="https://github.com/keploy/keploy"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="px-4 py-2 rounded-xl text-xs font-semibold bg-[var(--bg-surface)] hover:bg-[var(--bg-surface-elevated)] text-[var(--text-primary)] border border-[var(--border-color)] transition-all cursor-pointer flex items-center gap-1.5"
+    >
+      <GithubIcon className="w-3.5 h-3.5" />
+      <span>Star on GitHub</span>
+    </a>
+  </div>
+</div>
+
+</div>
+
+{/* Sticky Right Sidebar (4 columns on desktop) */}
+<aside className="hidden lg:block lg:col-span-4">
+  <div className="sticky top-24 space-y-6">
+    <TableOfContents />
+
+    {/* Quick Resource Card */}
+    <div className="p-4.5 rounded-2xl border border-[var(--border-color)] bg-[var(--bg-surface)] shadow-sm">
+      <div className="flex items-center gap-2 mb-2 text-xs font-bold text-[var(--text-primary)] uppercase tracking-wider">
+        <Terminal className="w-4 h-4 text-[var(--brand-orange)]" />
+        <span>Quick Terminal Cheat Sheet</span>
+      </div>
+      <div className="space-y-2 text-xs font-mono text-[var(--text-muted)]">
+        <div className="p-2 rounded bg-[var(--bg-surface-elevated)] border border-[var(--border-color)]">
+          <div className="text-[10px] text-[var(--brand-orange)]"># 1. Record</div>
+          keploy record -c "..."
+        </div>
+        <div className="p-2 rounded bg-[var(--bg-surface-elevated)] border border-[var(--border-color)]">
+          <div className="text-[10px] text-emerald-500"># 2. Test & Coverage</div>
+          keploy test -c "..." --delay 10
+        </div>
+      </div>
+    </div>
+  </div>
+</aside>
+
+</div>

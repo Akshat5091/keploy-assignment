@@ -1,0 +1,108 @@
+@import "tailwindcss";
+
+:root {
+  --bg-page: #f8fafc;
+  --bg-surface: #ffffff;
+  --bg-surface-elevated: #f1f5f9;
+  --bg-surface-subtle: #f8fafc;
+  --border-color: #e2e8f0;
+  --border-color-hover: #cbd5e1;
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #64748b;
+  --brand-orange: #ff6e2e;
+  --brand-orange-hover: #ff854d;
+  --brand-orange-subtle: rgba(255, 110, 46, 0.1);
+  --brand-cyan: #0284c7;
+  --brand-cyan-subtle: rgba(2, 132, 199, 0.1);
+  --code-bg: #0f172a;
+  --code-header-bg: #090e17;
+  --code-text: #e2e8f0;
+  --callout-info-bg: #f0f9ff;
+  --callout-info-border: #bae6fd;
+  --callout-tip-bg: #ecfdf5;
+  --callout-tip-border: #a7f3d0;
+  --callout-warning-bg: #fffbeb;
+  --callout-warning-border: #fde68a;
+  --callout-aha-bg: #faf5ff;
+  --callout-aha-border: #e9d5ff;
+  color-scheme: light dark;
+}
+
+[data-theme="dark"],
+.dark {
+  --bg-page: #080c14;
+  --bg-surface: #0f172a;
+  --bg-surface-elevated: #151f35;
+  --bg-surface-subtle: #0c1322;
+  --border-color: #1e293b;
+  --border-color-hover: #334155;
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --brand-orange: #ff7d42;
+  --brand-orange-hover: #ff9462;
+  --brand-orange-subtle: rgba(255, 125, 66, 0.12);
+  --brand-cyan: #38bdf8;
+  --brand-cyan-subtle: rgba(56, 189, 248, 0.12);
+  --code-bg: #0b1120;
+  --code-header-bg: #070a12;
+  --code-text: #e2e8f0;
+  --callout-info-bg: rgba(14, 165, 233, 0.08);
+  --callout-info-border: rgba(56, 189, 248, 0.25);
+  --callout-tip-bg: rgba(16, 185, 129, 0.08);
+  --callout-tip-border: rgba(16, 185, 129, 0.25);
+  --callout-warning-bg: rgba(245, 158, 11, 0.08);
+  --callout-warning-border: rgba(245, 158, 11, 0.25);
+  --callout-aha-bg: rgba(168, 85, 247, 0.08);
+  --callout-aha-border: rgba(168, 85, 247, 0.25);
+}
+
+
+body {
+  background-color: var(--bg-page);
+  color: var(--text-primary);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  transition: background-color 0.25s ease, color 0.25s ease;
+  overflow-x: hidden;
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-surface-subtle);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-color-hover);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* Smooth Scrolling */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+}
+
+/* Glow effects */
+.glow-orange {
+  box-shadow: 0 0 35px -5px rgba(255, 110, 46, 0.25);
+}
+
+.glow-cyan {
+  box-shadow: 0 0 35px -5px rgba(56, 189, 248, 0.25);
+}
+
+.glass-nav {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  background-color: rgba(var(--bg-surface), 0.85);
+}
