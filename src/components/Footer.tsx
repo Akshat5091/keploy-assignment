@@ -1,7 +1,6 @@
 "use client";
 
-import React from "react";
-import { Heart, ExternalLink } from "lucide-react";
+import { ExternalLink } from "lucide-react";
 import { GithubIcon } from "./Icons";
 
 export function Footer() {
@@ -58,10 +57,10 @@ export function Footer() {
 
         <div className="mt-8 pt-6 border-t border-[var(--border-color)] flex flex-col sm:flex-row items-center justify-between text-[11px] text-[var(--text-muted)] gap-3">
           <div>
-            Built with attention to detail, developer empathy, and technical rigor.
+            Keploy DevRel Assignment • Akshat Nagori
           </div>
           <div className="font-mono">
-            Keploy v2 • Go 1.22+ • Next.js 16 (App Router)
+            Keploy v2 • Go 1.22+ • Next.js 16
           </div>
         </div>
       </div>
